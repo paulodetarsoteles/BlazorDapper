@@ -1,8 +1,60 @@
-﻿@page "/Produto/editaproduto"
+﻿@page "/Produto/editaproduto/{id:int}"
 @inject IProdutoService produtoService
+@inject NavigationManager NavigationManager
 
 <h3>EditaProduto</h3>
+<hr />
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Estoque" class="control-label">Estoque</label>
+                <input for="Estoque" class="form-control" @bind="@produto.Estoque" />
+            </div>
+            <div class="form-group">
+                <label for="Nome" class="control-label">Nome</label>
+                <input for="Nome" class="form-control" @bind="@produto.Nome" />
+            </div>
+            <div class="form-group">
+                <label for="Preco" class="control-label">Preco</label>
+                <input for="Preco" class="form-control" @bind="@produto.Preco" />
+            </div>
+            <div class="form-group">
+                <label for="Descricao" class="control-label">Descricao</label>
+                <input for="Descricao" class="form-control" @bind="@produto.Descricao" />
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@AtualizaProduto" value="Atualiza" />
+            <input type="button" class="btn" @onclick="@Cancela" value="Cancela" />
+        </div>
+    </div>
+</form>
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
 
+    Produto produto = new Produto(); 
+
+    protected override async Task OnInitializedAsync() 
+    {
+        produto = await produtoService.GetById(Id); 
+    }
+
+    protected async Task AtualizaProduto()
+    {
+        await produtoService.Update(produto);
+        NavigationManager.NavigateTo("Produto/listaprodutos"); 
+    }
+
+    public void Cancela()
+    {
+        NavigationManager.NavigateTo("Produto/listaprodutos");
+    }
 }

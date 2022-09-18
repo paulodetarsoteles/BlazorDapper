@@ -50,7 +50,7 @@ namespace BlazorDapperApp.Services
                 using var tran = db.BeginTransaction();
                 try
                 {
-                    result = db.Query<T>(sp, parms, transaction: tran).FirstOrDefault();
+                    result = db.Query<T>(sp, parms, commandType: commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }
                 catch (Exception)
@@ -80,7 +80,7 @@ namespace BlazorDapperApp.Services
                 using var tran = db.BeginTransaction();
                 try
                 {
-                    result = db.Query<T>(sp, parms, transaction: tran).FirstOrDefault();
+                    result = db.Query<T>(sp, parms, commandType: commandType, transaction: tran).FirstOrDefault();
                     tran.Commit();
                 }
                 catch (Exception)

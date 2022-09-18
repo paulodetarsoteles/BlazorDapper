@@ -1,8 +1,56 @@
-﻿@page "/Produto/deletaproduto"
+﻿@page "/Produto/deletaproduto/{id:int}"
 @inject IProdutoService produtoService
+@inject NavigationManager NavigationManager
 
-<h3>DeletaProduto</h3>
+<p>Deseja deletar este produto com Id : <b> @id</b>?</p>
+<hr />
+<div class="col-md-8">
+    <table class="table">
+        <tr>
+            <td>Nome</td>
+            <td>@produto.Nome</td>
+        </tr>
+        <tr>
+            <td>Descrição</td>
+            <td>@produto.Descricao</td>
+        </tr>
+        <tr>
+            <td>Estoque</td>
+            <td>@produto.Estoque</td>
+        </tr>
+        <tr>
+            <td>Preço</td>
+            <td>@produto.Preco</td>
+        </tr>
+    </table>
+    <br />
+
+    <div class="form-group">
+        <input type="button" value="Deleta" @onclick="@Deleta" class="btn btn-primary" />
+        <input type="button" value="Cancela" @onclick="@Cancela" class="btn" />
+    </div>
+</div>
 
 @code {
 
+    [Parameter]
+    public int id { get; set; }
+
+    Produto produto = new Produto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produto = await produtoService.GetById(id);
+    }
+
+    protected async Task Deleta()
+    {
+        await produtoService.Delete(id);
+        NavigationManager.NavigateTo("Produto/listaprodutos");
+    }
+
+    void Cancela()
+    {
+        NavigationManager.NavigateTo("Produto/listaprodutos");
+    }
 }
